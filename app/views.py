@@ -193,9 +193,7 @@ class SensorList(APIView):
 
 
 
-# sensor_property = Sensorproperty.objects.filter(sensor_type=sensor_type).first()
-# if not sensor_property:
-#     return Response({'message': 'Sensorproperty not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
