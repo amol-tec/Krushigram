@@ -19,6 +19,8 @@ class Sensorproperty(models.Model):
 
 
 
+
+
 class Sensor(models.Model):
     # device_id = models.CharField(max_length=255)
     Battery = models.FloatField()

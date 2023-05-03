@@ -117,9 +117,7 @@ class SensorData(APIView):
 
 
 
-# from rest_framework import generics
-# from .serializers import SensorSerializerdd
-# from .models import Sensor
+
 
 
 
