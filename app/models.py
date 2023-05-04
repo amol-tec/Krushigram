@@ -36,6 +36,25 @@ class Sensor(models.Model):
 
 
 
+
+
+class Advisory(models.Model):
+    crop_name = models.CharField(max_length=100)
+    Stage = models.CharField(max_length=100)
+    Agromet_Advisory =models.TextField()
+
+
+# from django.db import models
+
+# class Advisory(models.Model):
+#     crop_name = models.CharField(max_length=100)
+#     stage_name = models.CharField(max_length=100)
+#     Agromet_advisory = models.TextField()
+
+    # def __str__(self):
+    #     return f"{self.crop_name} - {self.stage_name}"
+
+
     # class Sensorproperty(models.Model):
     #     latitude =models.FloatField()
     #     longitude=models.FloatField()

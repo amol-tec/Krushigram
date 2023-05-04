@@ -88,6 +88,13 @@ class SensorSerializerss(serializers.ModelSerializer):
 
 
 
+from rest_framework import serializers
+from .models import Advisory
+
+class AdvisorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advisory
+        fields = '__all__'
 
 
 

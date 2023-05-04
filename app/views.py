@@ -191,6 +191,78 @@ class SensorList(APIView):
 
 
 
+# class AddApplication(APIView):
+#     parser_classes = (MultiPartParser,)
+#     serializer_class = ApplicationSerializer
+#     def post(self, request, format=None):
+#         # import openpyxl
+#         excel_file = request.FILES["excel_file"]
+#         # you may put validations here to check extension or file size
+#         wb = openpyxl.load_workbook(excel_file)
+#         # getting a particular sheet by name out of many sheets
+#         worksheet = wb["Sheet1"]
+#         # print(worksheet.columns)
+#         for row in worksheet.iter_rows(min_row=2,values_only=True):
+#             print(row,"**********************&&&&&&&&&&&&")
+#             if row[0] is not None:
+#                 if (Application.objects.filter(aadharNumber=row[2]).exists()):
+#                     continue
+#                 else:
+#                     user = Application.objects.create(
+#                         name = row[0],
+#                         phoneNumber = row[1],
+#                         aadharNumber = row[2],
+#                         address = row[3],
+#                         district = row[4],
+#                         taluka = row[5],
+#                         haveGasConnection = False ,
+#                         belongToSC = True)
+#                     user.save()
+
+#         return Response({
+#             "status":"Success",
+#             "Message":"Successfully Registered."
+#             })
+
+import pandas as pd
+from rest_framework import views, status
+from rest_framework.response import Response
+from .models import Advisory
+from .serializers import AdvisorySerializer
+
+class ExcelUploadView(views.APIView):
+    serializer_class = AdvisorySerializer
+
+    def post(self, request, format=None):
+        # read Excel sheet data
+        try:
+            file = request.FILES['file']
+            data = pd.read_excel(file)
+        except:
+            return Response({'error': 'Invalid file'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # create new Advisory objects from Excel sheet data
+        advisories = []
+        for index, row in data.iterrows():
+            advisory = Advisory(Name_of_Crop=row['Name_of_Crop'], Stage=row['Stage'], Agromet_Advisory=row['Agromet_Advisory'])
+            advisories.append(advisory)
+        Advisory.objects.bulk_create(advisories)
+
+        # serialize and return the data
+        serialized_data = self.serializer_class(advisories, many=True)
+        return Response(serialized_data.data, status=status.HTTP_201_CREATED)
+
+
+
+
+
+
+        
+  
+    
+
+
+
 
 
 

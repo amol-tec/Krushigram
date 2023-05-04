@@ -21,8 +21,9 @@ from drf_yasg import openapi
 from django.conf import settings
 from rest_framework import permissions
 from django.conf.urls.static import static
-from app.views import SensorAPIView, SensorList, SensorDataView, Sensorpropertyviewer,SensorDataView,SensorDataCreateded, Sensorpropertyview, SensorData,SensorListView
+from app.views import SensorAPIView, SensorList, SensorDataView, Sensorpropertyviewer, SensorDataView, SensorDataCreateded, Sensorpropertyview, SensorData,SensorListView
 from app.views import SensorDataView
+from app.views import ExcelUploadView
 # from .views import DeviceAPIView
 # from app.views import DeviceAPIView
 
@@ -57,14 +58,10 @@ urlpatterns = [
     path('sensors/<str:sensor_type>/<str:created_at>/<str:device_id>/', SensorListView.as_view()),
     # path('sensorchanges/<str:sensor_type>/<str:created_at>/', SensorListView.as_view()),
     path('sensors/<str:sensor_type>/<str:created_at>/', SensorList.as_view()),
-
-
-    
+    path('upload-excel/', ExcelUploadView.as_view(), name='excel_upload'),
  
 
-
-  
-
-  
-
 ]
+
+
+
