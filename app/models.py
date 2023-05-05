@@ -39,9 +39,10 @@ class Sensor(models.Model):
 
 
 class Advisory(models.Model):
-    crop_name = models.CharField(max_length=100)
-    Stage = models.CharField(max_length=100)
-    Agromet_Advisory =models.TextField()
+    crop_name = models.CharField(max_length=100 , blank= True , null = True)
+    Stage = models.CharField(max_length=100 , blank = True , null = True )
+    Agromet_Advisory = models.TextField(blank= True , null= True)
+    created_at = models.DateField(auto_now=True,blank= True , null= True)
 
 
 # from django.db import models

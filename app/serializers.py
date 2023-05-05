@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Sensor,Sensorproperty
 from rest_framework import serializers
 # from .models import Sensor, Sensorproperty
+from .models import Advisory
 
 
 
@@ -88,15 +89,24 @@ class SensorSerializerss(serializers.ModelSerializer):
 
 
 
-from rest_framework import serializers
-from .models import Advisory
 
-class AdvisorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Advisory
-        fields = '__all__'
+# class AdvisorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Advisory
+#         fields = '__all__'
 
 
+# from rest_framework import serializers
+# from .models import Advisory
+
+# class AdvisorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Advisory
+#         fields = ('crop_name', 'Stage', 'Agromet_Advisory','created_at')
+
+
+class uploadExcelserializer(serializers.Serializer):
+    excel_file =serializers.FileField( required=False)
 
 
 

@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'KrushiGram.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'KRUSHIGRAM_7',
+        'NAME': 'krushigram_8',
         'USER': 'postgres',
         'PASSWORD': 'root',
         'HOST': 'localhost',

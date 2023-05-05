@@ -1,16 +1,18 @@
 from django.shortcuts import render
+from openpyxl import load_workbook
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
-from .serializers import SensorpropertySerializer,SensorSerializer , SensorDataSerializer,SensorpropertySerializers,SensorSerializerrr
+from .serializers import AdvisorySerializer, SensorpropertySerializer,SensorSerializer ,uploadExcelserializer,SensorDataSerializer,SensorpropertySerializers,SensorSerializerrr,AdvisorySerializer
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Sensor,Sensorproperty
+from .models import Sensor,Sensorproperty,Advisory
 from django.shortcuts import get_object_or_404
 from .serializers import SensorSerializerss
 from rest_framework import generics
 from .serializers import SensorSerializerdd
-from .models import Sensor
+from rest_framework.exceptions import NotFound
+# from .models import Sensor,Advisory
 
 # Create your views here.
 
@@ -131,29 +133,6 @@ class SensorListView(generics.ListAPIView):
 
 
     
-# fetch data with sensor_type and created_at
-
-# class SensorList(APIView):
-#     def get(self, request, sensor_type, created_at):
-#         # Retrieve the list of Sensorproperty objects for the specified sensor_type
-#         sensor_properties = Sensorproperty.objects.filter(sensor_type=sensor_type)
-        
-#         # Filter the Sensor objects by property and created_at for each Sensorproperty
-#         sensors = []
-#         # print('sensors-----',sensors)
-#         for sensor_property in sensor_properties:
-#             sensor_queryset = Sensor.objects.filter(property=sensor_property, 
-#                                                     created_at = created_at)
-#             sensors.extend(sensor_queryset)
-        
-#         # Check if any Sensor objects were found
-#         if not sensors:
-#             return Response({"message": "No Sensor data found for the specified type and date."},
-#                             status=status.HTTP_404_NOT_FOUND)
-        
-#         # Serialize the data and return a JSON response
-#         serializer = SensorSerializer(sensors, many=True)
-#         return Response(serializer.data)
     
 
 
@@ -224,33 +203,52 @@ class SensorList(APIView):
 #             "Message":"Successfully Registered."
 #             })
 
-import pandas as pd
-from rest_framework import views, status
-from rest_framework.response import Response
-from .models import Advisory
-from .serializers import AdvisorySerializer
-
-class ExcelUploadView(views.APIView):
-    serializer_class = AdvisorySerializer
-
+class DumpExcelInsertxlsx(generics.GenericAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = uploadExcelserializer
     def post(self, request, format=None):
-        # read Excel sheet data
-        try:
-            file = request.FILES['file']
-            data = pd.read_excel(file)
-        except:
-            return Response({'error': 'Invalid file'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # create new Advisory objects from Excel sheet data
-        advisories = []
-        for index, row in data.iterrows():
-            advisory = Advisory(Name_of_Crop=row['Name_of_Crop'], Stage=row['Stage'], Agromet_Advisory=row['Agromet_Advisory'])
-            advisories.append(advisory)
-        Advisory.objects.bulk_create(advisories)
+        # try:
+        if 'excel_file' not in request.FILES:
+            return Response({"status": "error", "message": "No file uploaded."}, status=400)
+        excel_file = request.FILES["excel_file"]
 
-        # serialize and return the data
-        serialized_data = self.serializer_class(advisories, many=True)
-        return Response(serialized_data.data, status=status.HTTP_201_CREATED)
+        if excel_file.size == 0 or excel_file.name.endswith(".xlsx") != True:
+
+            return Response({"status": "error","message": "only .xlsx file is supported."},status=400)
+
+        workbook = load_workbook(filename=excel_file)
+        sheet_name = workbook.sheetnames[0]
+        worksheet = workbook[sheet_name]
+        data_list = []
+
+        for row in worksheet.iter_rows(min_row=2, values_only=True):
+            if not any(row):  # check if row is empty or contains no data
+                break  # ignore empty row
+            data = Advisory(crop_name=row[0], Stage=row[1], Agromet_Advisory=row[2])
+            data_list.append(data)
+
+        # print(data_list)
+        
+        Advisory.objects.bulk_create(data_list)
+
+        return Response({"status": "Success","message": "Successfully Uploaded."})
+
+
+
+
+
+
+class AdvisoryList(APIView):
+    def get(self, request, created_at):
+        advisories = Advisory.objects.filter(created_at=created_at)
+        if not advisories:
+            raise NotFound(detail='No advisories found for the given created_at')
+        serializer = AdvisorySerializer(advisories, many=True)
+        return Response(serializer.data)
+
+
+
 
 
 
@@ -260,6 +258,10 @@ class ExcelUploadView(views.APIView):
         
   
     
+
+
+
+
 
 
 
