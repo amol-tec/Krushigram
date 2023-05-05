@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@5kvc+1(ksbnmwwh##j7h+933)zuh_3n#v-8la8cuexm3kz0hz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.162',]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -88,6 +88,16 @@ WSGI_APPLICATION = 'KrushiGram.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'KRUSHIGRAM_7',
+#         'USER': 'postgres',
+#         'PASSWORD': 'admin',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
