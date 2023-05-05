@@ -3,16 +3,16 @@ from openpyxl import load_workbook
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
-from .serializers import AdvisorySerializer, SensorpropertySerializer,SensorSerializer ,uploadExcelserializer,SensorDataSerializer,SensorpropertySerializers,SensorSerializerrr,AdvisorySerializer
+from .serializers import  SensorpropertySerializer,SensorSerializer ,SensorDataSerializer,SensorpropertySerializers,SensorSerializerrr,uploadExcelserializer,AdvisorySerializer,LayerSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Sensor,Sensorproperty,Advisory
+from .models import Sensor,Sensorproperty
 from django.shortcuts import get_object_or_404
 from .serializers import SensorSerializerss
 from rest_framework import generics
 from .serializers import SensorSerializerdd
 from rest_framework.exceptions import NotFound
-# from .models import Sensor,Advisory
+from .models import Sensor,Advisory,Layers
 
 # Create your views here.
 
@@ -136,8 +136,39 @@ class SensorListView(generics.ListAPIView):
     
 
 
+# class SensorList(APIView):
+#     def get(self, request, sensor_type=None, created_at=None):
+#         # Retrieve the list of Sensorproperty objects
+#         sensor_properties = Sensorproperty.objects.all()
+        
+#         # Get a list of unique sensor types
+#         sensor_types = set([prop.sensor_type for prop in sensor_properties])
+        
+#         if not sensor_type:
+#             # Return the list of sensor types
+#             return Response(sensor_types)
+        
+#         # Filter the Sensorproperty objects by sensor_type
+#         sensor_properties = sensor_properties.filter(sensor_type=sensor_type)
+        
+#         # Filter the Sensor objects by property and created_at for each Sensorproperty
+#         sensors = []
+#         for sensor_property in sensor_properties:
+#             sensor_queryset = Sensor.objects.filter(property=sensor_property, 
+#                                                     created_at = created_at)
+#             sensors.extend(sensor_queryset)
+        
+#         # Check if any Sensor objects were found
+#         if not sensors:
+#             return Response({"message": "No Sensor data found for the specified type and date."},
+#                             status=status.HTTP_404_NOT_FOUND)
+        
+#         # Serialize the data and return a JSON response
+#         serializer = SensorSerializer(sensors, many=True)
+#         return Response(serializer.data)
+
 class SensorList(APIView):
-    def get(self, request, sensor_type=None, created_at=None):
+    def get(self, request, sensor_type=None, start_date=None, end_date=None):
         # Retrieve the list of Sensorproperty objects
         sensor_properties = Sensorproperty.objects.all()
         
@@ -149,13 +180,13 @@ class SensorList(APIView):
             return Response(sensor_types)
         
         # Filter the Sensorproperty objects by sensor_type
-        sensor_properties = sensor_properties.filter(sensor_type=sensor_type)
+        sensor_properties = Sensorproperty.objects.filter(sensor_type=sensor_type)
         
-        # Filter the Sensor objects by property and created_at for each Sensorproperty
+        # Filter the Sensor objects by property and created_at between start_date and end_date for each Sensorproperty
         sensors = []
         for sensor_property in sensor_properties:
             sensor_queryset = Sensor.objects.filter(property=sensor_property, 
-                                                    created_at = created_at)
+                                                    created_at__range=(start_date, end_date))
             sensors.extend(sensor_queryset)
         
         # Check if any Sensor objects were found
@@ -166,7 +197,7 @@ class SensorList(APIView):
         # Serialize the data and return a JSON response
         serializer = SensorSerializer(sensors, many=True)
         return Response(serializer.data)
-   
+
 
 
 
@@ -202,6 +233,11 @@ class SensorList(APIView):
 #             "status":"Success",
 #             "Message":"Successfully Registered."
 #             })
+
+
+
+
+# Advisory
 
 class DumpExcelInsertxlsx(generics.GenericAPIView):
     parser_classes = [MultiPartParser]
@@ -239,6 +275,9 @@ class DumpExcelInsertxlsx(generics.GenericAPIView):
 
 
 
+
+
+
 class AdvisoryList(APIView):
     def get(self, request, created_at):
         advisories = Advisory.objects.filter(created_at=created_at)
@@ -248,9 +287,23 @@ class AdvisoryList(APIView):
         return Response(serializer.data)
 
 
+class LayerList(APIView):
+    def get(self, request):
+        layer_list = Layers.objects.all()
+        serializer = LayerSerializer(layer_list, many=True)
+        return Response(serializer.data)
+    
 
-
-
+class LayerPost(GenericAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = LayerSerializer
+    def post(self, request):
+        serializer = LayerSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+        
 
 
 

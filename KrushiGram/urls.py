@@ -21,7 +21,7 @@ from drf_yasg import openapi
 from django.conf import settings
 from rest_framework import permissions
 from django.conf.urls.static import static
-from app.views import SensorAPIView, SensorList, SensorDataView,DumpExcelInsertxlsx, Sensorpropertyviewer,SensorDataView, SensorDataCreateded, Sensorpropertyview, SensorData,SensorListView,AdvisoryList
+from app.views import SensorAPIView,SensorList, SensorDataView, Sensorpropertyviewer,SensorDataView, SensorDataCreateded, Sensorpropertyview, SensorData,SensorListView,DumpExcelInsertxlsx,AdvisoryList,LayerList, LayerPost
 from app.views import SensorDataView
 # from app.views import ExcelUploadView
 # from .views import DeviceAPIView
@@ -55,15 +55,17 @@ urlpatterns = [
     path('sensor/<str:device_id>/<str:created_at>/', SensorData.as_view()),
     
     path('sensors/', SensorListView.as_view()),
-    path('sensors/<str:sensor_type>/<str:created_at>/<str:device_id>/', SensorListView.as_view()),
+    # path('sensors/<str:sensor_type>/<str:created_at>/<str:device_id>/', SensorListView.as_view()),
     # path('sensorchanges/<str:sensor_type>/<str:created_at>/', SensorListView.as_view()),
-    path('sensors/<str:sensor_type>/<str:created_at>/', SensorList.as_view()),
+    # path('sensors/<str:sensor_type>/<str:created_at>/', SensorList.as_view()),
+    path('sensors/<str:sensor_type>/<str:start_date>/<str:end_date>/', SensorList.as_view(), name='sensor-list'),
     # path('upload-excel/', ExcelUploadView.as_view(), name='excel_upload'),
-    path('upload-excel/', DumpExcelInsertxlsx.as_view(), name='excel_upload'),
+    path('upload-excel/',DumpExcelInsertxlsx.as_view(), name='excel_upload'),
     # path('upload/', AdvisoryUploadView.as_view(), name='advisory-upload')
     path('advisory/<str:created_at>/', AdvisoryList.as_view()),
+    path('layerlist/', LayerList.as_view()),
+    path('layerpost/', LayerPost.as_view()),
  
-
 ]
 
 

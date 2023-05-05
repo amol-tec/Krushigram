@@ -35,6 +35,21 @@ class Sensor(models.Model):
     created_at = models.DateField(auto_now_add=True)
 
 
+    # class Sensor(models.Model):
+    # Battery = models.FloatField()
+    # EC_S1 = models.FloatField()
+    # EC_S2 = models.FloatField()
+    # Moisture_S1_P = models.FloatField()
+    # Moisture_S2_P = models.FloatField()
+    # Temperature_S1_P = models.FloatField()
+    # Temperature_S2_P = models.FloatField()
+    # property = models.ForeignKey(Sensorproperty, on_delete=models.CASCADE)
+    # created_at = models.DateField(auto_now_add=True)
+    # from_date = models.DateField(null=True, blank=True)
+    # to_date = models.DateField(null=True, blank=True)
+
+
+
 
 
 
@@ -43,6 +58,12 @@ class Advisory(models.Model):
     Stage = models.CharField(max_length=100 , blank = True , null = True )
     Agromet_Advisory = models.TextField(blank= True , null= True)
     created_at = models.DateField(auto_now=True,blank= True , null= True)
+
+
+
+
+class Layers(models.Model):
+    layer_name = models.CharField(max_length=100 , blank= True , null = True)
 
 
 # from django.db import models
