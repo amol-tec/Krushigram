@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'rest_framework',
+    # 'rest_framework_gis',
     'app',
 ]
 
@@ -87,17 +88,18 @@ WSGI_APPLICATION = 'KrushiGram.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
+# local db
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'KRUSHIGRAM_7',
+#         'NAME': 'krushigram_8',
 #         'USER': 'postgres',
-#         'PASSWORD': 'admin',
+#         'PASSWORD': 'root',
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
 # }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -108,6 +110,45 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ],
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.MultiPartParser',
+        
+    ]
+   
+}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'KRUSHIGRAM',
+#         'USER': 'postgres',
+#         'PASSWORD': 'root',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+# server db
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'krushigram_8',
+#         'USER': 'postgres',
+#         'PASSWORD': 'admin',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 SWAGGER_SETTINGS = {
    'SECURITY_DEFINITIONS': {
@@ -138,6 +179,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
+# GDAL_LIBRARY_PATH = 'C:/OSGeo4W64/bin/gdal300.dll'
+# GDAL_LIBRARY_PATH = '/usr/lib/libgdal.so.1'
+
 
 
 # Internationalization
@@ -171,3 +217,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # # Path where media is stored
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# use this if setting up on Windows 10 with GDAL installed from OSGeo4W using defaults
+if os.name == 'nt':
+    VIRTUAL_ENV_BASE = os.environ['VIRTUAL_ENV']
+    os.environ['PATH'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
+    os.environ['PROJ_LIB'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
