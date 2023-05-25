@@ -22,14 +22,14 @@ class Sensorproperty(models.Model):
 
 class Sensor(models.Model):
     # device_id = models.CharField(max_length=255)
-    Battery = models.FloatField()
-    EC_S1 = models.FloatField()
-    EC_S2 = models.FloatField()
-    Moisture_S1_P = models.FloatField()
-    Moisture_S2_P = models.FloatField()
-    Temperature_S1_P = models.FloatField()
-    Temperature_S2_P = models.FloatField()
-    property = models.ForeignKey(Sensorproperty,on_delete=models.CASCADE, related_name='Sensor_Sensorproperty')
+    Battery = models.FloatField(blank = True , null = True)
+    EC_S1 = models.FloatField(blank = True , null = True)
+    EC_S2 = models.FloatField(blank = True , null = True)
+    Moisture_S1_P = models.FloatField(blank = True , null = True)
+    Moisture_S2_P = models.FloatField(blank = True , null = True)
+    Temperature_S1_P = models.FloatField(blank = True , null = True)
+    Temperature_S2_P = models.FloatField(blank = True , null = True)
+    property = models.ForeignKey(Sensorproperty,on_delete=models.CASCADE, related_name ='Sensor_Sensorproperty')
     # created_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateField(auto_now_add=True)
 

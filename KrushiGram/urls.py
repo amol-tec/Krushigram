@@ -21,7 +21,7 @@ from drf_yasg import openapi
 from django.conf import settings
 from rest_framework import permissions
 from django.conf.urls.static import static
-from app.views import SensorAPIView,SensorList, SensorDataView, Sensorpropertyviewer,SensorDataView, SensorDataCreateded, Sensorpropertyview,SensorListView,DumpExcelInsertxlsx,AdvisoryList,LayerList, LayerPost,SensorData,GeosensorExcelList,GeosensorList
+from app.views import SensorAPIView,SensorList, SensorDataView, Sensorpropertyviewer,SensorDataView, SensorDataCreateded, Sensorpropertyview,SensorListView,DumpExcelInsertxlsx,AdvisoryList,LayerList, LayerPost,SensorData,GeosensorExcelList,GeosensorList,SensorUploadView
 from app.views import SensorDataView
 
 
@@ -60,11 +60,12 @@ urlpatterns = [
     path('advisory/<str:created_at>/', AdvisoryList.as_view()),
     path('layerlist/', LayerList.as_view()),
     path('layerpost/', LayerPost.as_view()),
-    
-    path('api/sensors/<str:sensor_type>/<str:start_date>/<str:end_date>/',GeosensorExcelList.as_view(), name='sensor-list-filtered'),
+    # downloadExcel_list
+    path('api/sensor/<str:sensor_type>/<str:start_date>/<str:end_date>/',GeosensorExcelList.as_view(), name='sensor-list-filtered'),
     path('api/sensors_geojson/<str:sensor_type>/<str:start_date>/<str:end_date>/',GeosensorList.as_view(), name='sensor-list-filtered'),
     # path('upload-json/', UploadJSONView.as_view(), name='upload_json')
-    # path('upload/', SensorUploadView.as_view(), name='sensor-upload')
+    path('upload-json/', SensorUploadView.as_view(), name='sensor-upload')
+    
     
 
     

@@ -13,6 +13,14 @@ class SensorDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+class sensorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Sensor
+        fields = '__all__'
+
+
+
 class SensorpropertySerializers(serializers.ModelSerializer):
     class Meta:
         model = Sensorproperty
@@ -25,12 +33,15 @@ class SensorpropertySerializer(serializers.ModelSerializer):
         model = Sensorproperty
         fields = ('latitude', 'longitude','device_id')
 
-class SensorSerializer(serializers.ModelSerializer):
+class SensorExcelSerializer(serializers.ModelSerializer):
     property = SensorpropertySerializer()
 
     class Meta:
         model = Sensor
         fields = '__all__'
+
+
+
 
 class SensorSerializerrr(serializers.ModelSerializer):
     property = SensorpropertySerializer()
@@ -86,8 +97,20 @@ class SensorSerializerss(serializers.ModelSerializer):
         
 
 
+class SensorpropertydataviewSerializer(serializers.ModelSerializer):
+    model = Sensorproperty
+    fields = ('latitude','longitude','device_id')
 
-class SensorSerializer(serializers.ModelSerializer):
+class SensordataviewSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Sensor
+        fields = ('Battery','EC_S1','EC_S2','Moisture_S1_P','Moisture_S2_P','Temperature_S1_P','Temperature_S2_P','created_at','property') 
+
+        
+
+
+# excel download geojson data SensorSerialize
+class SensorlistSerializer(serializers.ModelSerializer):
     device_id =serializers.SerializerMethodField()
     class Meta:
         model = Sensor
@@ -95,8 +118,9 @@ class SensorSerializer(serializers.ModelSerializer):
                   'Temperature_S1_P', 'Temperature_S2_P', 'created_at','device_id')
     
     def get_device_id(self,obj):
-        device_id =obj.property.device_id
+        device_id = obj.property.device_id
         return device_id
+
 
 
 
@@ -122,65 +146,27 @@ class LayerSerializer(serializers.ModelSerializer):
         model = Layers
         fields = "__all__"
         
-# from rest_framework import serializers
-
-# class AdvisorySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Advisory
-#         fields = '__all__'
-
-################################################################################
-
-# serializers.py
-
-# api/serializers.py
-# from rest_framework import serializers
-# from .models import Sensorproperty, Sensor
-
-# class SensorpropertySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Sensorproperty
-#         fields = '__all__'
-
-# class SensorSerializer(serializers.ModelSerializer):
-#     property = SensorpropertySerializer()
-
-#     class Meta:
-#         model = Sensor
-#         fields = '__all__'
-# from rest_framework import serializers
-# from .models import Sensorproperty, Sensor
-
-# class SensorSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Sensor
-#         fields = '__all__'
-
-# class SensorpropertySerializer(serializers.ModelSerializer):
-#     sensors = SensorSerializer(many=True)
-
-#     class Meta:
-#         model = Sensorproperty
-#         fields = '__all__'
-
-#     def create(self, validated_data):
-#         sensors_data = validated_data.pop('sensors')
-#         sensor_property = Sensorproperty.objects.create(**validated_data)
-#         for sensor_data in sensors_data:
-#             Sensor.objects.create(property=sensor_property, **sensor_data)
-#         return sensor_property
-# from rest_framework import serializers
-# from .models import Sensor
-
-# class SensorSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Sensor
-#         fields = '__all__'
 
 
-# class SensorPropertySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Sensorproperty
-#         fields = '__all__'
+
+
+
+class JsonuploadSerializer(serializers.Serializer):
+    file = serializers.FileField(required=False)
+
+
+    class Meta:
+        fields = ('file',)
+
+
+
+
+
+
+
+
+
+
+
 
 
